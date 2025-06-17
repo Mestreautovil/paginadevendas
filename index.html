@@ -3,703 +3,441 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minha Página de Vendas</title>
-    <!-- Inclui o Tailwind CSS para estilização fácil e responsiva -->
+    <title>Página com Escalas de Serviço</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Define a fonte Inter para toda a página, se disponível */
         body {
             font-family: 'Inter', sans-serif;
-            /* Cor de fundo amarela */
-            background-color: #facc15; /* Tailwind yellow-400 */
-            min-height: 100vh; /* Garante que o corpo ocupe a altura total da tela */
-            display: flex; /* Usa flexbox para posicionamento */
-            flex-direction: column; /* Coloca os itens em coluna */
-            align-items: center; /* Centraliza horizontalmente */
-            justify-content: flex-start; /* Alinha os itens ao topo verticalmente */
-            padding-top: 2rem; /* Adiciona um pouco de espaço no topo */
-            padding-bottom: 2rem; /* Adiciona espaço na parte inferior para conteúdo futuro */
-        }
-        /* Estilos adicionais para a imagem, garantindo responsividade */
-        .logo-image {
-            max-width: 54%; /* Garante que a imagem não ultrapasse a largura da tela em dispositivos menores, reduzida em 40% */
-            max-height: 120px; /* Define uma altura máxima para a imagem em telas menores */
-            height: auto; /* Mantém a proporção da imagem */
-            border-radius: 1rem; /* Borda arredondada para a imagem */
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Sombra suave para destacar a imagem */
-            margin-bottom: 2rem; /* Espaço abaixo da imagem */
-        }
-
-        /* Quebra de ponto para telas maiores, se necessário, para controlar o tamanho máximo da logo */
-        @media (min-width: 768px) {
-            .logo-image {
-                max-width: 180px; /* Tamanho máximo da logo em desktops, reduzido em 40% de 300px */
-                max-height: 150px; /* Define uma altura máxima para a imagem em telas maiores */
-            }
-        }
-
-        /* Estilos para o frame do celular */
-        .mobile-frame {
-            width: 360px; /* Largura reduzida em 10% (de 400px) */
-            height: 675px; /* Altura reduzida em 10% (de 750px) */
-            background-color: #000; /* Cor do frame do celular */
-            border-radius: 2.5rem; /* Bordas bem arredondadas para simular o aparelho */
-            padding: 1.35rem; /* Preenchimento interno ajustado */
-            box-shadow: 0 0 0 10px #333, /* Borda externa escura */
-                        0 0 0 12px #555, /* Segunda borda para profundidade */
-                        0 20px 50px rgba(0, 0, 0, 0.4); /* Sombra para dar a sensação de flutuação */
-            position: relative; /* Para posicionar a tela interna */
+            background: linear-gradient(to bottom, #00BFFF, #00008B);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            margin-top: 2rem; /* Espaço acima do frame do celular */
-        }
-
-        /* Notch ou área superior do celular */
-        .mobile-frame::before {
-            content: '';
-            position: absolute;
-            top: 0.675rem; /* Ajustado para o novo tamanho */
-            width: 40%;
-            height: 0.765rem; /* Ligeiramente ajustado */
-            background-color: #333;
-            border-radius: 0.75rem;
-            z-index: 10;
-        }
-
-        /* Estilos para o contêiner do vídeo para responsividade */
-        .video-container {
-            position: relative;
-            width: 100%;
-            padding-bottom: 177.77%; /* Proporção 9:16 (vídeo vertical) */
-            height: 0;
-            overflow: hidden;
-            border-radius: 1.5rem; /* Bordas arredondadas para a tela do vídeo */
-            background-color: black; /* Fundo preto enquanto o vídeo carrega */
-        }
-
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 0;
-        }
-
-        /* Responsividade para o frame do celular em telas menores */
-        @media (max-width: 640px) {
-            .mobile-frame {
-                width: 90%; /* Ajusta a largura do celular para caber em telas pequenas */
-                height: auto; /* Altura automática para manter proporção */
-                aspect-ratio: 9/16; /* Mantém a proporção de um celular vertical */
-            }
-            .mobile-frame::before {
-                 top: 0.5rem; /* Ajusta a posição do notch em telas pequenas */
-                 height: 0.6rem;
-            }
-        }
-
-        /* Estilos para a flag de desconto */
-        .discount-flag {
-            background: linear-gradient(135deg, #ef4444, #dc2626); /* Tom vermelho mais intenso com gradiente */
+            margin: 0;
             color: white;
-            padding: 0.75rem 1.25rem; /* Padding reduzido para a flag */
-            border-radius: 1.5rem; /* Bordas mais arredondadas */
-            box-shadow: 0 10px 25px rgba(220, 38, 38, 0.4); /* Sombra mais forte e avermelhada */
             text-align: center;
-            margin-top: 3rem; /* Mais espaço acima da flag */
-            width: 11/12; /* Largura responsiva */
-            max-width: 600px; /* Aumenta um pouco a largura máxima para acomodar o conteúdo horizontalmente */
-            display: flex;
-            flex-direction: column; /* Padrão para mobile: empilhado */
-            align-items: center;
-            justify-content: center;
-            gap: 0.75rem; /* Espaço entre os itens no layout empilhado */
-            border: 3px solid #f87171; /* Borda sutil */
-            animation: pulse 2s infinite; /* Adiciona uma animação de pulso */
+            box-sizing: border-box;
+            padding-bottom: 20px;
         }
-
-        /* Animação de pulso para a flag */
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-            100% { transform: scale(1); }
-        }
-
-        /* Layout horizontal para telas maiores */
-        @media (min-width: 768px) {
-            .discount-flag {
-                flex-direction: row; /* Layout horizontal para desktop */
-                justify-content: space-around; /* Distribui os itens horizontalmente */
-                gap: 1.5rem; /* Espaço entre os itens no layout horizontal */
-                padding: 1rem 2rem; /* Aumenta o padding para desktop */
-            }
-        }
-
-        .discount-flag .timer-box {
-            background-color: rgba(0, 0, 0, 0.2); /* Fundo sutil para o timer */
-            padding: 0.3rem 0.6rem; /* Padding reduzido para o timer */
-            border-radius: 0.5rem; /* Bordas mais arredondadas */
-            font-size: 1.8rem; /* Tamanho da fonte menor para o timer */
-            font-weight: bold;
-            letter-spacing: 1px; /* Espaçamento entre letras */
-            white-space: nowrap; /* Impede quebra de linha no timer */
-        }
-        @media (min-width: 768px) {
-            .discount-flag .timer-box {
-                font-size: 2.2rem; /* Tamanho da fonte maior para desktop */
-                padding: 0.4rem 0.8rem;
-            }
-        }
-
-
-        .discount-flag .hurry-text {
-            font-size: 1.1rem; /* Tamanho da fonte para a frase "CORRA!" */
-            font-weight: 600;
-            white-space: nowrap; /* Impede quebra de linha */
-        }
-        @media (min-width: 768px) {
-            .discount-flag .hurry-text {
-                font-size: 1.3rem;
-            }
-        }
-
-        .discount-flag .discount-text {
-            font-size: 1.5rem; /* Tamanho da fonte para o texto de desconto */
-            font-weight: bold;
-            line-height: 1.2;
-            white-space: nowrap; /* Impede quebra de linha */
-        }
-        .discount-flag .discount-text .font-extrabold {
-             font-size: 1.8rem; /* Aumenta o tamanho da porcentagem */
-        }
-        @media (min-width: 768px) {
-            .discount-flag .discount-text {
-                font-size: 1.8rem;
-            }
-            .discount-flag .discount-text .font-extrabold {
-                font-size: 2.2rem;
-            }
-        }
-
-        /* Estilos para a seção de benefícios */
-        .benefits-section {
-            background-color: white;
-            background-opacity: 0.95;
-            border-radius: 1.5rem;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15); /* Sombra mais suave */
-            padding: 1.5rem 2.5rem;
-            margin-top: 3rem; /* Espaço maior acima da seção */
-            margin-bottom: 2rem; /* Espaço abaixo da seção */
-        }
-
-        .benefits-section h2 {
-            font-size: 2.25rem;
-            font-weight: 900; /* Extra bold */
-            color: #1a202c; /* gray-900 */
-            text-align: center;
-            margin-bottom: 2.5rem; /* Mais espaço abaixo do título */
-            line-height: 1.3;
-        }
-        .benefits-section h2 .text-green-600 {
-            color: #059669; /* green-600 */
-        }
-        @media (min-width: 768px) {
-            .benefits-section h2 {
-                font-size: 2.5rem;
-            }
-        }
-
-
-        .benefit-card {
-            background-color: #f8f8f8; /* Fundo cinza claro para os cards */
-            border-radius: 1rem;
-            padding: 1.5rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transições suaves */
-            border: 1px solid #eee; /* Borda sutil */
-        }
-        .benefit-card:hover {
-            transform: translateY(-8px) scale(1.02); /* Efeito de elevação e leve aumento ao passar o mouse */
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Sombra mais proeminente no hover */
-        }
-        .benefit-card span {
-            font-size: 3.5rem; /* Tamanho do emoji */
-            margin-bottom: 1rem;
-        }
-        .benefit-card h3 {
-            font-size: 1.25rem; /* text-xl */
-            font-weight: 700; /* Bold */
-            color: #374151; /* gray-800 */
-            margin-bottom: 0.5rem;
-            line-height: 1.3;
-        }
-        .benefit-card p {
-            font-size: 1rem; /* text-base */
-            color: #4b5563; /* gray-600 */
-            line-height: 1.5;
-        }
-
-        /* Estilos para a seção de chamada para ação intermediária */
-        .call-to-action-section {
-            background-color: #2563eb; /* Um azul vibrante */
-            color: white;
-            padding: 2.5rem 1.5rem; /* Padding generoso */
-            border-radius: 1.5rem;
-            box-shadow: 0 15px 30px rgba(37, 99, 235, 0.4); /* Sombra azulada */
-            text-align: center;
-            margin-top: 3rem;
-            width: 11/12;
-            max-width: 800px; /* Largura máxima para desktop */
-            border: 3px solid #60a5fa; /* Borda clara */
-            animation: bounceIn 1s forwards; /* Animação de entrada */
-        }
-
-        @keyframes bounceIn {
-            0% { opacity: 0; transform: scale(0.8); }
-            60% { opacity: 1; transform: scale(1.05); }
-            80% { transform: scale(0.98); }
-            100% { transform: scale(1); }
-        }
-
-        .call-to-action-section p {
-            font-size: 1.5rem;
-            font-weight: 700;
-            line-height: 1.4;
-            margin-bottom: 1.5rem;
-        }
-        .call-to-action-section p strong {
-            font-weight: 900; /* Extra bold para destaque */
-        }
-        .call-to-action-section p .text-yellow-300 {
-            color: #fcd34d; /* yellow-300 */
-        }
-
-        /* Responsividade para a seção de chamada para ação */
-        @media (min-width: 768px) {
-            .call-to-action-section p {
-                font-size: 2rem;
-                margin-bottom: 2rem;
-            }
-        }
-
-        /* Estilos para o botão de Acessar Agora (geral) */
-        .access-button {
-            display: inline-flex; /* Permite centralizar e aplicar padding */
-            align-items: center;
-            justify-content: center;
-            margin-top: 3rem; /* Espaço entre a flag e o botão */
-            margin-bottom: 3rem; /* Espaço entre o botão e a próxima seção */
-            background: linear-gradient(135deg, #22c55e, #10b981); /* Verde vibrante com gradiente */
-            color: white;
-            font-size: 1.75rem; /* text-3xl */
-            font-weight: 900; /* font-extrabold */
-            padding: 1.25rem 2.5rem; /* Padding generoso */
-            border-radius: 9999px; /* rounded-full para formato de pílula */
-            box-shadow: 0 15px 30px rgba(34, 197, 94, 0.4); /* Sombra verde chamativa */
-            text-decoration: none; /* Remove sublinhado do link */
-            transition: all 0.3s ease-in-out; /* Transição suave para hover e active */
-            border: 3px solid #86efac; /* Borda sutil para contraste */
-            cursor: pointer; /* Indica que é clicável */
-            letter-spacing: 1px; /* Espaçamento entre letras */
-            transform: scale(1); /* Estado inicial para animação */
-        }
-
-        .access-button:hover {
-            background: linear-gradient(135deg, #10b981, #22c55e); /* Inverte o gradiente no hover */
-            transform: scale(1.05); /* Leve aumento no tamanho */
-            box-shadow: 0 20px 40px rgba(34, 197, 94, 0.6); /* Sombra mais intensa */
-        }
-
-        .access-button:active {
-            transform: scale(0.98); /* Pequena retração ao clicar */
-            box-shadow: 0 5px 15px rgba(34, 197, 94, 0.3); /* Sombra mais discreta no clique */
-        }
-
-        /* Responsividade para o botão */
-        @media (max-width: 768px) {
-            .access-button {
-                font-size: 1.5rem;
-                padding: 1rem 2rem;
-            }
-        }
-
-        /* Estilos para a seção de provas sociais (imagens) */
-        .proof-section {
-            background-color: white;
-            background-opacity: 0.95;
-            border-radius: 1.5rem;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-            padding: 2rem 1.5rem;
-            margin-top: 3rem; /* Espaço acima desta seção */
-            margin-bottom: 3rem; /* Aumenta espaço abaixo da seção para o novo botão */
-            width: 11/12;
-            max-width: 900px; /* Largura máxima para desktop */
-            text-align: center;
-        }
-        .proof-section h2 {
-            font-size: 2.25rem;
-            font-weight: 900; /* Extra bold */
-            color: #1a202c; /* gray-900 */
-            margin-bottom: 2.5rem;
-            line-height: 1.3;
-        }
-        .proof-section h2 .text-purple-600 {
-            color: #7c3aed; /* purple-600 */
-        }
-        @media (min-width: 768px) {
-            .proof-section h2 {
-                font-size: 2.5rem;
-            }
-        }
-
-        .proof-images {
-            display: flex;
-            flex-direction: column; /* Empilha as imagens em telas menores */
-            align-items: center;
-            gap: 1.5rem; /* Espaço entre as imagens */
-        }
-        @media (min-width: 768px) {
-            .proof-images {
-                flex-direction: row; /* Alinha as imagens horizontalmente em telas maiores */
-                justify-content: center;
-            }
-        }
-
-        .proof-image-wrapper {
-            width: 100%; /* Ocupa a largura total em telas pequenas */
-            max-width: 400px; /* Largura máxima para cada imagem */
-            background-color: #f0f0f0; /* Fundo sutil para as imagens */
-            border-radius: 1rem;
-            padding: 0.75rem;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .proof-image-wrapper:hover {
-            transform: translateY(-5px) scale(1.01);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-        }
-        .proof-image-wrapper img {
+        .logo-container {
             width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+        }
+        .logo {
+            max-width: 133px;
             height: auto;
-            border-radius: 0.75rem; /* Bordas arredondadas para a imagem interna */
-            display: block; /* Remove espaço extra abaixo da imagem */
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         }
-
-        /* Estilos para a seção de CTA final */
-        .final-cta-section {
-            background: linear-gradient(135deg, #1f2937, #111827); /* Tons de cinza escuro/preto */
+        .service-title {
+            font-size: 24px;
+            font-weight: bold;
             color: white;
-            padding: 3rem 1.5rem;
-            border-radius: 1.5rem;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5); /* Sombra intensa */
-            text-align: center;
-            margin-top: 4rem; /* Mais espaço acima */
-            width: 11/12;
-            max-width: 900px; /* Mais largura */
-            border: 4px solid #4b5563; /* Borda visível */
-            animation: fadeInScale 1s forwards; /* Animação de entrada */
+            margin-top: 30px;
+            margin-bottom: 30px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+            letter-spacing: 0.05em;
         }
-
-        @keyframes fadeInScale {
-            0% { opacity: 0; transform: scale(0.9); }
-            100% { opacity: 1; transform: scale(1); }
-        }
-
-        .final-cta-section h2 {
-            font-size: 2.5rem;
-            font-weight: 900;
-            margin-bottom: 1.5rem;
-            line-height: 1.2;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3); /* Sombra no texto */
-        }
-        @media (min-width: 768px) {
-            .final-cta-section h2 {
-                font-size: 3.5rem;
-            }
-        }
-
-        .final-cta-section p {
-            font-size: 1.25rem;
-            font-weight: 500;
-            line-height: 1.6;
-            margin-bottom: 2rem;
-            max-width: 700px; /* Limita a largura do parágrafo */
-            margin-left: auto;
-            margin-right: auto;
-        }
-        @media (min-width: 768px) {
-            .final-cta-section p {
-                font-size: 1.5rem;
-            }
-        }
-
-        /* Estilos para o botão de acesso final */
-        .final-access-button {
-            display: inline-flex;
+        #main-scales-container {
+            display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #f59e0b, #d97706); /* Amarelo/Laranja vibrante */
-            color: #1a202c; /* Texto escuro para contraste */
-            font-size: 2rem;
-            font-weight: 900;
-            padding: 1.5rem 3.5rem;
-            border-radius: 9999px;
-            box-shadow: 0 20px 40px rgba(245, 158, 11, 0.6); /* Sombra laranja forte */
-            text-decoration: none;
-            transition: all 0.3s ease-in-out;
-            border: 4px solid #fcd34d; /* Borda amarela */
-            cursor: pointer;
-            letter-spacing: 1.5px;
-            transform: scale(1);
-            animation: bounce 2s infinite; /* Animação de "bounce" contínua */
+            gap: 2rem;
+            width: 100%;
+            padding: 0 1rem;
         }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
-            }
-            40% {
-                transform: translateY(-15px); /* Sobe um pouco */
-            }
-            60% {
-                transform: translateY(-7px); /* Volta um pouco */
-            }
-        }
-
-        .final-access-button:hover {
-            background: linear-gradient(135deg, #d97706, #f59e0b); /* Inverte o gradiente no hover */
-            transform: scale(1.08); /* Aumento mais notável no hover */
-            box-shadow: 0 25px 50px rgba(245, 158, 11, 0.8);
-            animation: none; /* Pausa a animação de bounce no hover */
-        }
-
-        .final-access-button:active {
-            transform: scale(0.95);
-            box-shadow: 0 10px 20px rgba(245, 158, 11, 0.4);
-        }
-
-        @media (max-width: 768px) {
-            .final-access-button {
-                font-size: 1.75rem;
-                padding: 1.25rem 2.5rem;
-            }
-        }
-
-        /* Estilos para o rodapé */
-        footer {
-            margin-top: 4rem; /* Espaço entre o último elemento e o rodapé */
-            padding: 2rem;
-            background-color: rgba(0, 0, 0, 0.1); /* Um fundo levemente transparente */
+        .white-square {
+            background-color: white;
             border-radius: 1rem;
-            color: #4b5563; /* Cor do texto mais suave */
-            font-size: 0.9rem;
-            box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: #333;
+            border: 3px solid;
+        }
+        .white-square.branca-border {
+            border-color: #f0f0f0;
+        }
+        .white-square.vermelha-border {
+            border-color: #dc3545;
+        }
+        .scale-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .scale-table th, .scale-table td {
+            border: 1px solid #e0e0e0;
+            padding: 18px; 
+            text-align: left;
+            font-size: 0.95rem;
+        }
+        .scale-table th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+            color: #444;
+            text-transform: uppercase;
+        }
+        .scale-table tbody tr:nth-child(even) {
+            background-color: #fdfdfd;
+        }
+        .scale-table tbody tr:hover {
+            background-color: #e0f7fa;
+        }
+        .table-date-header {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            padding: 10px 0;
+            border-radius: 0.75rem 0.75rem 0 0;
+        }
+        /* Default styles for .table-date-header when not 'vermelha' */
+        .table-date-header.bg-gray-200 {
+            background-color: #ededed; /* Original gray */
+            color: #333; /* Original text color */
+        }
+
+        /* Styles for .table-date-header when 'vermelha' */
+        .table-date-header.bg-red-500 {
+            background-color: #dc3545; /* Red from .vermelha-border */
+            color: white;
+        }
+        .section-divider {
+            height: 10px;
+            background-color: #f0f0f0;
+            border-left: none;
+            border-right: none;
+        }
+        /* New style for the formatted rank and number */
+        .formatted-rank-number {
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        @media (max-width: 640px) {
+            .logo {
+                max-width: 100px;
+            }
+            .logo-container {
+                margin-top: 20px;
+            }
+            .service-title {
+                font-size: 20px;
+                letter-spacing: 0.03em;
+            }
+            #main-scales-container {
+                gap: 1.5rem;
+                padding: 0 0.5rem;
+            }
+            .white-square {
+                border-radius: 0.75rem;
+                padding: 15px;
+            }
+            .scale-table th, .scale-table td {
+                padding: 10px;
+                font-size: 0.85rem;
+            }
+            .table-date-header {
+                font-size: 1.05rem;
+                padding: 8px 0;
+                border-radius: 0.75rem 0.75rem 0 0;
+            }
+            .section-divider {
+                height: 8px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Logo da página -->
-    <img src="https://i.postimg.cc/8PNWdKdp/Chat-GPT-Image-22-de-mai-de-2025-20-24-03.png" alt="Logo da Página de Vendas" class="logo-image">
-
-    <!-- Frase Chamativa -->
-    <div class="w-11/12 md:w-3/4 lg:w-2/3 xl:w-1/2 p-4 md:p-6 bg-white bg-opacity-90 rounded-2xl shadow-xl text-center mb-8">
-        <p class="text-xl md:text-2xl lg:text-3xl font-extrabold text-gray-800 leading-tight">
-            Ja pensou em <span class="text-blue-600">ganhar R$300 por dia</span> Vendendo no Mercado Livre?
-            <br class="hidden sm:inline"> Agora <span class="text-green-600">você pode!</span>
-        </p>
+    <div class="logo-container">
+        <img src="https://i.postimg.cc/vmgYw3bT/logo-sem-fundo.png" alt="Logo Sem Fundo" class="logo" onerror="this.onerror=null;this.src='https://placehold.co/200x200/cccccc/333333?text=Logo';">
     </div>
 
-    <!-- Simulação da tela do celular com vídeo -->
-    <div class="mobile-frame">
-        <div class="video-container">
-            <!-- O vídeo do YouTube incorporado -->
-            <!-- Autoplay e playsinline ativados. O som tenta iniciar, mas pode ser bloqueado por políticas do navegador. -->
-            <!-- Observação: Não é possível forçar o download do vídeo ou controlar a qualidade de forma estática via iframe. -->
-            <!-- O YouTube gerencia a qualidade automaticamente. -->
-            <iframe
-                src="https://www.youtube.com/embed/dbeSECxC_bw?autoplay=1&controls=1&playsinline=1"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen>
-            </iframe>
-        </div>
+    <h1 class="service-title">ESCALAS DE SERVIÇO</h1>
+
+    <div id="main-scales-container">
+        <p class="text-white text-lg mt-10">Carregando escalas...</p>
     </div>
 
-    <!-- Flag de Desconto com Timer Compacta -->
-    <div class="discount-flag w-11/12">
-        <p class="hurry-text">CORRA!</p>
-        <div class="timer-box">
-            <span id="countdown-timer">15:00</span>
-        </div>
-        <p class="discount-text">
-            <span class="font-extrabold text-yellow-300">80%</span> OFF!
-        </p>
-    </div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+        import { getDatabase, ref, onValue, remove } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
 
-    <!-- Botão de Ação (primeiro) -->
-    <a href="https://pay.kiwify.com.br/dULsKeZ" class="access-button">
-        Acessar Agora!
-    </a>
-    <!-- Lembre-se de substituir "#" pelo link do seu checkout! -->
+        const firebaseConfig = {
+            apiKey: "AIzaSyASJFA8fgN83pfFIvjhK460c0Km4kIKgJc",
+            authDomain: "escala-de-servi.firebaseapp.com",
+            projectId: "escala-de-servi",
+            storageBucket: "escala-de-servi.firebasestorage.app",
+            messagingSenderId: "1051260696308",
+            appId: "1:1051260696308:web:6d978c17f05b5e2db950a1",
+            measurementId: "G-RSLQ9EPDKE",
+            databaseURL: "https://escala-de-servi-default-rtdb.firebaseio.com/"
+        };
 
-    <!-- Nova seção de benefícios -->
-    <div class="benefits-section w-11/12 md:w-5/6 lg:w-4/5 xl:w-3/4">
-        <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 text-center mb-10 leading-tight">
-            O que você vai <span class="text-green-600">desbloquear</span> com o curso:
-        </h2>
+        let app, db, auth, userId;
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
-            <!-- Benefício 1: Mentoria e Primeiras Vendas -->
-            <div class="benefit-card">
-                <span class="text-5xl mb-4">🤝</span>
-                <h3 class="text-xl font-bold">Mentoria e Primeiras Vendas</h3>
-                <p class="text-gray-600">Receba acompanhamento e suporte completo para realizar suas primeiras vendas no Mercado Livre com confiança.</p>
-            </div>
+        const currentAppId = firebaseConfig.appId.split(':')[1];
+        const SCALES_PATH = `artifacts/${currentAppId}/public/scales`;
 
-            <!-- Benefício 2: Fornecedores Autenticados -->
-            <div class="benefit-card">
-                <span class="text-5xl mb-4">✅</span>
-                <h3 class="text-xl font-bold">Fornecedores Autenticados</h3>
-                <p class="text-gray-600">Acesso exclusivo a fornecedores verificados pelo Mercado Livre, com envio automático para suas vendas.</p>
-            </div>
-
-            <!-- Benefício 3: Tráfego Pago e Anúncios -->
-            <div class="benefit-card">
-                <span class="text-5xl mb-4">📈</span>
-                <h3 class="text-xl font-bold">Tráfego Pago e Anúncios</h3>
-                <p class="text-gray-600">Domine a psicologia e as ferramentas essenciais para criar anúncios eficazes e gerar tráfego pago.</p>
-            </div>
-
-            <!-- Benefício 4: Ferramenta de Precificação -->
-            <div class="benefit-card">
-                <span class="text-5xl mb-4">💰</span>
-                <h3 class="text-xl font-bold">Ferramenta de Precificação</h3>
-                <p class="text-gray-600">Utilize nossa ferramenta exclusiva para precificar seus produtos e garantir sempre o melhor preço competitivo.</p>
-            </div>
-
-            <!-- Benefício 5: Gestão de Caixa Eficiente -->
-            <div class="benefit-card">
-                <span class="text-5xl mb-4">📊</span>
-                <h3 class="text-xl font-bold">Gestão de Caixa Eficiente</h3>
-                <p class="text-gray-600">Aprenda a gerenciar seu dinheiro de forma inteligente, otimizando lucros e reinvestimentos.</p>
-            </div>
-
-            <!-- Benefício 6: Escolha de Produtos e Investimento -->
-            <div class="benefit-card">
-                <span class="text-5xl mb-4">💡</span>
-                <h3 class="text-xl font-bold">Escolha de Produtos e Investimento</h3>
-                <p class="text-gray-600">Descubra como selecionar os produtos mais lucrativos e investir seu capital de forma estratégica.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Seção de Chamada para Ação Intermediária -->
-    <div class="call-to-action-section w-11/12">
-        <p>
-            Por menos da metade do preço você vai ter acesso a <strong>TUDO ISSO</strong>.
-            <br>
-            Pare de perder tempo e <span class="text-yellow-300">vem aprender a faturar</span> de maneira fácil e automática de casa,
-            <br>
-            Aprenda a faturar <strong class="text-yellow-300">DORMINDO!</strong>
-        </p>
-    </div>
-
-    <!-- Nova seção de Provas Sociais -->
-    <div class="proof-section w-11/12">
-        <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 text-center mb-10 leading-tight">
-            Veja os <span class="text-purple-600">Resultados Reais</span> da Nossa Mentoria!
-        </h2>
-
-        <div class="proof-images">
-            <!-- Imagem de Prova 1 -->
-            <div class="proof-image-wrapper">
-                <img src="https://i.postimg.cc/bNrwwd6W/Whats-App-Image-2025-06-13-at-19-04-06.jpg" alt="[Image of Mentorship Proof 1]">
-            </div>
-
-            <!-- Imagem de Prova 2 -->
-            <div class="proof-image-wrapper">
-                <img src="https://i.postimg.cc/fTRfWjQs/Captura-de-tela-2025-06-13-190228.png" alt="[Image of Mentorship Proof 2]">
-            </div>
-        </div>
-    </div>
-
-    <!-- Segundo Botão de Ação -->
-    <a href="https://pay.kiwify.com.br/dULsKeZ" class="access-button">
-        Quero Acessar o Curso Agora!
-    </a>
-    <!-- Lembre-se de substituir "#" pelo link do seu checkout! -->
-
-    <!-- Seção de Chamada para Ação Final e Poderosa -->
-    <div class="final-cta-section w-11/12">
-        <h2 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white text-center mb-6 leading-tight">
-            Não Espere Mais! <br>Sua Jornada de Sucesso Começa AGORA!
-        </h2>
-        <p class="text-white text-lg md:text-xl text-center mb-8">
-            Com todo o conhecimento, ferramentas e mentoria que você vai receber,
-            o sucesso no Mercado Livre está ao seu alcance. Esta é a sua chance de
-            transformar sua realidade financeira e alcançar a liberdade que você sempre quis.
-        </p>
-        <!-- Botão de Acesso Final e Mais Chamativo -->
-        <a href="https://pay.kiwify.com.br/dULsKeZ" class="final-access-button">
-            Sim! Quero Minha Liberdade Financeira Agora!
-        </a>
-        <!-- Lembre-se de substituir "#" pelo link do seu checkout! -->
-    </div>
-
-    <!-- Rodapé -->
-    <footer class="w-full text-center text-gray-700 text-sm mt-8 p-4">
-        <p>&copy; 2025 Mentorias FK$</p>
-    </footer>
-
-
-    <script>
-        // Obtenha o elemento onde o timer será exibido
-        const timerElement = document.getElementById('countdown-timer');
-        // Defina a duração do timer em segundos (15 minutos * 60 segundos/minuto)
-        let timeLeft = 15 * 60; // 900 segundos
-
-        // Função para formatar o tempo para exibição
-        function formatTime(seconds) {
-            const minutes = Math.floor(seconds / 60);
-            const remainingSeconds = seconds % 60;
-            // Preenche com zero à esquerda se menor que 10
-            return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
-        }
-
-        // Função para atualizar o timer
-        function updateTimer() {
-            if (timeLeft > 0) {
-                timeLeft--;
-                timerElement.textContent = formatTime(timeLeft);
-            } else {
-                // Se o tempo acabou, limpa o intervalo e atualiza o conteúdo da flag
-                clearInterval(timerInterval);
-                const discountFlag = document.querySelector('.discount-flag');
-                if (discountFlag) {
-                    discountFlag.innerHTML = `
-                        <p class="text-white text-xl md:text-2xl font-bold">
-                            OFERTA EXPIRADA!
-                        </p>
-                    `;
-                    discountFlag.classList.remove('animate-pulse'); // Para a animação de pulso
-                    discountFlag.style.background = 'linear-gradient(135deg, #71717a, #52525b)'; // Fundo cinza
-                    discountFlag.style.boxShadow = 'none'; // Remove a sombra
-                    discountFlag.style.justifyContent = 'center'; // Centraliza o texto
+        async function initializeFirebase() {
+            try {
+                if (!firebaseConfig.apiKey) {
+                    const mainScalesContainer = document.getElementById('main-scales-container');
+                    mainScalesContainer.innerHTML = '<p class="text-white text-lg mt-10 text-red-400">Erro: Configuração do Firebase ausente ou inválida.</p>';
+                    return;
                 }
+                app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getDatabase(app);
+
+                await signInAnonymously(auth);
+
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        userId = user.uid;
+                        console.log("Usuário autenticado anonimamente:", userId);
+                        listenForScalesData();
+                    } else {
+                        console.log("Nenhum usuário autenticado.");
+                        userId = null;
+                        const mainScalesContainer = document.getElementById('main-scales-container');
+                        mainScalesContainer.innerHTML = '<p class="text-white text-lg mt-10 text-red-400">Autenticação necessária para carregar escalas.</p>';
+                    }
+                });
+            } catch (error) {
+                console.error("Erro ao inicializar Firebase ou autenticar:", error);
+                const mainScalesContainer = document.getElementById('main-scales-container');
+                mainScalesContainer.innerHTML = `<p class="text-white text-lg mt-10 text-red-400">Erro ao carregar o aplicativo: ${error.message}</p>`;
             }
         }
 
-        // Exibição inicial do timer
-        timerElement.textContent = formatTime(timeLeft);
+        // --- NOVA FUNÇÃO: Formatar o nome para exibição na página da escala ---
+        function formatDisplayMilitaryName(name, number = null) {
+            if (!name || typeof name !== 'string') {
+                return 'N/A';
+            }
 
-        // Atualiza o timer a cada segundo
-        const timerInterval = setInterval(updateTimer, 1000);
+            let formattedPart = '';
+            let restOfName = name.trim();
+
+            // Try to extract rank and then number if present
+            const rankMatch = restOfName.match(/^([A-Za-z.]+)\s*(.*)$/); // Matches first word (rank)
+            if (rankMatch) {
+                const rank = rankMatch[1].toUpperCase();
+                restOfName = rankMatch[2].trim();
+
+                const numberMatch = restOfName.match(/^(\d+)\s*(.*)$/); // Matches number after rank
+                if (numberMatch) {
+                    const num = numberMatch[1];
+                    restOfName = numberMatch[2].trim();
+                    formattedPart = `<span class="formatted-rank-number">${rank} ${num}</span>`;
+                } else {
+                    formattedPart = `<span class="formatted-rank-number">${rank}</span>`;
+                }
+            } else {
+                // If no recognizable rank at the beginning, just use the name as is.
+                // Or you might want a default rank like "MILITAR"
+                formattedPart = '<span class="formatted-rank-number">MILITAR</span>'; // Default if no rank found
+            }
+
+            // Append the remaining name
+            let finalName = '';
+            if (restOfName) {
+                // Capitalize the first letter of each part of the rest of the name
+                finalName = restOfName.split(' ').map(word => {
+                    if (word.length === 0) return '';
+                    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+                }).join(' ');
+            }
+            
+            // If a separate number was passed (e.g., from dynamic inputs), prioritize it if format is just name.
+            // This part handles the "SD 000 Nome" where 000 is from a separate number field.
+            if (number && number !== 'S/N' && formattedPart.indexOf(number) === -1) { // Avoid duplicating number if already in formattedPart
+                formattedPart = `<span class="formatted-rank-number">${formattedPart.replace(/<\/?span[^>]*>/g, '')} ${number}</span>`;
+            }
+
+            return `${formattedPart} ${finalName}`.trim();
+        }
+        // --- FIM DA NOVA FUNÇÃO ---
+
+        function listenForScalesData() {
+            if (!db) {
+                console.error("Realtime Database não inicializado.");
+                return;
+            }
+
+            const scalesRef = ref(db, SCALES_PATH);
+            
+            onValue(scalesRef, (snapshot) => {
+                const scalesData = [];
+                snapshot.forEach((childSnapshot) => {
+                    const key = childSnapshot.key;
+                    const data = childSnapshot.val();
+                    scalesData.push({ id: key, ...data });
+                });
+                console.log("Dados das escalas recebidos:", scalesData);
+                updateScalesDisplay(scalesData);
+            }, (error) => {
+                console.error("Erro ao obter dados das escalas do Realtime Database:", error);
+                const mainScalesContainer = document.getElementById('main-scales-container');
+                mainScalesContainer.innerHTML = `<p class="text-white text-lg mt-10 text-red-400">Erro ao carregar escalas: ${error.message}</p>`;
+            });
+        }
+
+        function updateScalesDisplay(schedules) {
+            const mainScalesContainer = document.getElementById('main-scales-container');
+            mainScalesContainer.innerHTML = '';
+
+            schedules.sort((a, b) => {
+                // Get current date without time for comparison
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                const dateA = new Date(a.date + "T00:00:00");
+                const dateB = new Date(b.date + "T00:00:00");
+
+                // Prioritize current/future dates
+                if (dateA >= today && dateB < today) {
+                    return -1; // A comes before B
+                }
+                if (dateA < today && dateB >= today) {
+                    return 1; // B comes before A
+                }
+
+                // For dates in the same category (both future/current or both past), sort descending
+                return dateB.getTime() - dateA.getTime();
+            });
+
+            let hasActiveScales = false;
+
+            const now = new Date(); // Get current date/time to check for expiration
+            now.setHours(now.getHours() - 3); // Adjust to Acre time zone (-5 from UTC, -3 from Brasília)
+
+            schedules.forEach(data => {
+                // For display, use the saved date
+                const scaleDateObj = new Date(data.date + "T00:00:00"); // Use T00:00:00 to represent start of the day
+                const expirationDate = new Date(scaleDateObj);
+                expirationDate.setDate(expirationDate.getDate() + 1); // Scale expires at the start of the next day
+
+                if (now >= expirationDate) {
+                    console.log(`Removing expired scale: ${data.date}`);
+                    remove(ref(db, `${SCALES_PATH}/${data.id}`));
+                    return; 
+                }
+
+                hasActiveScales = true;
+
+                const whiteSquareDiv = document.createElement('div');
+                whiteSquareDiv.className = `white-square ${data.color}-border`; 
+
+                const formattedDate = scaleDateObj.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                const dayOfWeek = scaleDateObj.toLocaleDateString('pt-BR', { weekday: 'long' }).toUpperCase();
+
+                let tableRowsHtml = '';
+
+                // Helper to add a row, applying the new formatting
+                const addFormattedRow = (funcName, militarName, militarNumber = null) => {
+                    const displayMilitar = formatDisplayMilitaryName(militarName, militarNumber);
+                    return `
+                        <tr>
+                            <td><strong>${funcName}</strong></td>
+                            <td>${displayMilitar}</td>
+                        </tr>
+                    `;
+                };
+
+                // Helper for array-based rows
+                const addFormattedArrayRows = (funcName, arrayData) => {
+                    let html = '';
+                    const militaries = Array.isArray(arrayData) && arrayData.length > 0 
+                                             ? arrayData 
+                                             : [{name: 'N/A', number: 'S/N'}]; 
+
+                    militaries.forEach((militar, index) => {
+                        const displayMilitar = formatDisplayMilitaryName(militar.name, militar.number);
+                        if (index === 0) {
+                            html += `
+                                <tr>
+                                    <td rowspan="${militaries.length}" style="vertical-align: middle; text-align: center;"><strong>${funcName}</strong></td>
+                                    <td>${displayMilitar}</td>
+                                </tr>
+                            `;
+                        } else {
+                            html += `
+                                <tr>
+                                    <td>${displayMilitar}</td>
+                                </tr>
+                            `;
+                        }
+                    });
+                    return html;
+                };
+
+                tableRowsHtml += addFormattedRow("Oficial de Dia", data.oficialDeDia);
+                tableRowsHtml += addFormattedRow("Adjunto ao Oficial", data.adjuntoOficial);
+                tableRowsHtml += addFormattedRow("Sgt de Dia", data.sgtDeDia);
+                tableRowsHtml += addFormattedRow("Cmt da Guarda", data.cmtGuarda);
+                tableRowsHtml += addFormattedRow("Cb Dia ao Btl", data.cbDiaBtl);
+                tableRowsHtml += addFormattedRow("Cabo da Guarda", data.caboGuarda);
+                tableRowsHtml += addFormattedRow("Mot. Ambulância", data.motAmbulancia);
+                tableRowsHtml += addFormattedRow("Mot. Sobreaviso CTA", data.motSobreavisoCta);
+
+                // For "Mot. de Dia", use name and number from the object
+                tableRowsHtml += addFormattedRow("Mot. de Dia", data.motDeDia?.name, data.motDeDia?.number);
+
+                // Add the section divider
+                tableRowsHtml += `<tr><td colspan="2" class="section-divider"></td></tr>`;
+
+                tableRowsHtml += addFormattedArrayRows("Plantão a CEEM", data.plantaoCeem);
+
+                // Add the section divider
+                tableRowsHtml += `<tr><td colspan="2" class="section-divider"></td></tr>`;
+
+                tableRowsHtml += addFormattedArrayRows("Guardas ao Quartel", data.guardasQuartel);
+                
+                // Determine the background class for the header
+                let headerBgClass = '';
+                if (data.color === 'vermelha') {
+                    headerBgClass = 'bg-red-500 text-white'; // Tailwind CSS classes for red background and white text
+                } else {
+                    headerBgClass = 'bg-gray-200 text-gray-800'; // Default background for other colors
+                }
+
+                whiteSquareDiv.innerHTML = `
+                    <div class="table-date-header ${headerBgClass}">
+                        <span>${formattedDate} - ${dayOfWeek}</span>
+                    </div>
+                    <table class="scale-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 40%;">FUNÇÃO</th>
+                                <th style="width: 60%;">MILITAR ESCALADO</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${tableRowsHtml}
+                        </tbody>
+                    </table>
+                `;
+                mainScalesContainer.appendChild(whiteSquareDiv);
+            });
+
+            if (!hasActiveScales) {
+                mainScalesContainer.innerHTML = '<p class="text-white text-lg mt-10">Nenhuma escala ativa no momento.</p>';
+            }
+        }
+
+        window.onload = initializeFirebase;
     </script>
 </body>
 </html>
