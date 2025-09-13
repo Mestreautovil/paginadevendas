@@ -3,441 +3,361 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página com Escalas de Serviço</title>
+    <title>Um Pedido de Desculpas</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(to bottom, #00BFFF, #00008B);
-            min-height: 100vh;
+            overflow: hidden; /* Previne scroll em telas sem conteúdo */
+            background-color: #111827;
+        }
+        .dancing-script { font-family: 'Dancing Script', cursive; }
+        .screen {
+            position: absolute;
+            inset: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin: 0;
-            color: white;
-            text-align: center;
-            box-sizing: border-box;
-            padding-bottom: 20px;
-        }
-        .logo-container {
-            width: 100%;
-            display: flex;
             justify-content: center;
-            margin-top: 40px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1s ease-in-out;
+            padding: 2rem 1rem;
+            min-height: 100dvh; /* Usa a altura dinâmica da viewport */
+            width: 100vw;
         }
-        .logo {
-            max-width: 133px;
-            height: auto;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        .screen.visible { opacity: 1; pointer-events: auto; }
+        .screen.scrollable {
+            justify-content: flex-start;
+            overflow-y: auto;
         }
-        .service-title {
-            font-size: 24px;
-            font-weight: bold;
-            color: white;
-            margin-top: 30px;
-            margin-bottom: 30px;
-            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
-            letter-spacing: 0.05em;
+        .heart-part { transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55); transform-origin: 50px 30px; }
+        .left-heart { transform: rotate(-20deg); }
+        .right-heart { transform: rotate(20deg); }
+        .joined .left-heart, .joined .right-heart { transform: rotate(0); }
+        .heart-wrapper.glow { animation: glow-scale-fade 3s forwards 0.5s; }
+        @keyframes glow-scale-fade {
+            0% { transform: scale(1); filter: drop-shadow(0 0 10px #ff4da6); opacity: 1; }
+            50% { transform: scale(25); filter: drop-shadow(0 0 50px #ff4da6); opacity: 1; }
+            100% { transform: scale(50); opacity: 0; }
         }
-        #main-scales-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2rem;
-            width: 100%;
-            padding: 0 1rem;
-        }
-        .white-square {
-            background-color: white;
-            border-radius: 1rem;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            color: #333;
-            border: 3px solid;
-        }
-        .white-square.branca-border {
-            border-color: #f0f0f0;
-        }
-        .white-square.vermelha-border {
-            border-color: #dc3545;
-        }
-        .scale-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-        .scale-table th, .scale-table td {
-            border: 1px solid #e0e0e0;
-            padding: 18px; 
-            text-align: left;
-            font-size: 0.95rem;
-        }
-        .scale-table th {
-            background-color: #f5f5f5;
-            font-weight: bold;
-            color: #444;
-            text-transform: uppercase;
-        }
-        .scale-table tbody tr:nth-child(even) {
-            background-color: #fdfdfd;
-        }
-        .scale-table tbody tr:hover {
-            background-color: #e0f7fa;
-        }
-        .table-date-header {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            padding: 10px 0;
-            border-radius: 0.75rem 0.75rem 0 0;
-        }
-        /* Default styles for .table-date-header when not 'vermelha' */
-        .table-date-header.bg-gray-200 {
-            background-color: #ededed; /* Original gray */
-            color: #333; /* Original text color */
-        }
-
-        /* Styles for .table-date-header when 'vermelha' */
-        .table-date-header.bg-red-500 {
-            background-color: #dc3545; /* Red from .vermelha-border */
-            color: white;
-        }
-        .section-divider {
-            height: 10px;
-            background-color: #f0f0f0;
-            border-left: none;
-            border-right: none;
-        }
-        /* New style for the formatted rank and number */
-        .formatted-rank-number {
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-        @media (max-width: 640px) {
-            .logo {
-                max-width: 100px;
-            }
-            .logo-container {
-                margin-top: 20px;
-            }
-            .service-title {
-                font-size: 20px;
-                letter-spacing: 0.03em;
-            }
-            #main-scales-container {
-                gap: 1.5rem;
-                padding: 0 0.5rem;
-            }
-            .white-square {
-                border-radius: 0.75rem;
-                padding: 15px;
-            }
-            .scale-table th, .scale-table td {
-                padding: 10px;
-                font-size: 0.85rem;
-            }
-            .table-date-header {
-                font-size: 1.05rem;
-                padding: 8px 0;
-                border-radius: 0.75rem 0.75rem 0 0;
-            }
-            .section-divider {
-                height: 8px;
-            }
-        }
+        input[type="radio"]:checked + label { border-color: #ec4899; background-color: #ec48991a; color: #f9a8d4; }
+        .gradient-background { background: linear-gradient(-45deg, #f8cdda, #d1a8e0, #a8d5e0, #c3e0a8); background-size: 400% 400%; animation: gradientBG 15s ease infinite; }
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .phone-frame { width: 90%; max-width: 300px; aspect-ratio: 9 / 17; border: 12px solid #2d3748; border-radius: 40px; padding: 5px; background: #111827; box-shadow: 0 0 20px rgba(0,0,0,0.5); overflow: hidden; }
+        .phone-frame img, .phone-frame iframe { border-radius: 30px; }
+        .typing-text::after { content: '|'; animation: blink 1s step-end infinite; }
+        @keyframes blink { from, to { color: transparent; } 50% { color: #f9a8d4; } }
+        .rating-hearts .heart-rating { transition: all 0.2s; cursor: pointer; }
+        .rating-hearts:hover .heart-rating { color: #fbcfe8; }
+        .rating-hearts .heart-rating:hover ~ .heart-rating { color: #9ca3af; }
+        .rating-hearts .heart-rating.selected { color: #ec4899; }
+        .envelope { cursor: pointer; position: relative; width: 280px; height: 180px; background-color: #fca5a5; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: transform 0.5s; }
+        .envelope:hover { transform: translateY(-5px); }
+        .envelope-flap { position: absolute; top: 0; left: 0; width: 100%; height: 50%; background-color: #f87171; clip-path: polygon(0 0, 100% 0, 50% 100%); transform-origin: top; transition: transform 0.5s; }
+        .letter { position: absolute; bottom: 0; left: 5%; width: 90%; height: 85%; background-color: white; color: #1f2937; border-radius: 5px; box-shadow: 0 -2px 5px rgba(0,0,0,0.1); transform: translateY(80%); transition: transform 0.5s 0.2s; padding: 1rem; text-align: center; display: none; flex-direction: column; justify-content: center; align-items: center;}
+        .envelope.open .envelope-flap { transform: rotateX(180deg); }
+        .envelope.open .letter { transform: translateY(-10px); display: flex; }
     </style>
 </head>
 <body>
-    <div class="logo-container">
-        <img src="https://i.postimg.cc/vmgYw3bT/logo-sem-fundo.png" alt="Logo Sem Fundo" class="logo" onerror="this.onerror=null;this.src='https://placehold.co/200x200/cccccc/333333?text=Logo';">
+
+    <!-- Tela 1: Coração Quebrado -->
+    <div id="heart-screen" class="screen visible text-center">
+        <div id="heart-wrapper" class="relative heart-wrapper w-48 h-48 cursor-pointer">
+            <svg class="w-full h-full" viewBox="0 0 100 95">
+                <path class="heart-part left-heart" d="M50 95 C 40 80, 0 65, 0 40 C 0 15, 20 0, 50 30" fill="#dc2626" style="filter: drop-shadow(-2px 2px 3px rgba(0,0,0,0.5));"></path>
+                <path class="heart-part right-heart" d="M50 95 C 60 80, 100 65, 100 40 C 100 15, 80 0, 50 30" fill="#dc2626" style="filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.5));"></path>
+            </svg>
+        </div>
+        <p id="instruction" class="mt-8 text-lg text-gray-400 transition-opacity duration-500">Toque duas vezes no coração para consertar</p>
     </div>
 
-    <h1 class="service-title">ESCALAS DE SERVIÇO</h1>
-
-    <div id="main-scales-container">
-        <p class="text-white text-lg mt-10">Carregando escalas...</p>
+    <!-- Tela 2: Validação de Identidade -->
+    <div id="identity-screen" class="screen text-center">
+        <div class="bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-sm w-full">
+            <h2 class="text-2xl font-bold mb-6 text-pink-300">Valide sua identidade...</h2>
+            <p class="text-lg mb-6 text-gray-300">Quem é você?</p>
+            <div class="space-y-4">
+                <input type="radio" name="identity" id="choice1" class="hidden">
+                <label for="choice1" class="block w-full text-center border-2 border-gray-600 rounded-lg p-4 cursor-pointer transition-all duration-300 hover:border-pink-400">MINHOQUINHA CAPENGUINHA</label>
+                <input type="radio" name="identity" id="choice2" class="hidden">
+                <label for="choice2" class="block w-full text-center border-2 border-gray-600 rounded-lg p-4 cursor-pointer transition-all duration-300 hover:border-pink-400">DRAGÃO SINGELO</label>
+            </div>
+        </div>
     </div>
+    
+    <!-- Tela 3: Mensagem de Desculpas -->
+    <div id="apology-screen" class="screen text-center gradient-background">
+        <div class="text-center text-gray-800 bg-white/70 backdrop-blur-sm p-8 rounded-2xl shadow-2xl max-w-md w-full">
+            <h1 class="dancing-script text-5xl md:text-6xl mb-6 text-gray-900">Meu Amor,</h1>
+            <p class="text-lg md:text-xl leading-relaxed mb-8">
+                Sei que errei com você e que tenho sido muito rude e chato. Mas, de todas as portas que o mundo pode abrir, por favor, não feche a sua para mim. Odeio imaginar que nunca mais vou ter seu abraço e seu beijo. Veja o que preparei para você.
+            </p>
+            <button id="advance-btn-1" class="bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:scale-105 transform transition-transform duration-300 flex items-center justify-center mx-auto">
+                Avançar <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Tela 4: Foto (Scrollable) -->
+    <div id="photo-screen" class="screen scrollable bg-gray-900">
+         <div class="w-full max-w-lg mx-auto flex flex-col items-center">
+            <p class="text-xl md:text-2xl text-gray-300 mb-8 mt-8">"Meu amor, eu sei que passo dos limites às vezes. Preciso que você me ensine, que brigue comigo quando isso acontecer."</p>
+            <div class="phone-frame mx-auto">
+                <img src="https://i.postimg.cc/DzM5Hkj5/Whats-App-Image-2025-09-13-at-16-00-11.jpg" onerror="this.onerror=null;this.src='https://placehold.co/300x550/111827/ffffff?text=Nossa+Foto+Especial';" alt="Foto de nós dois" class="w-full h-full object-cover">
+            </div>
+            <p id="typing-text" class="text-md md:text-lg text-gray-300 mt-8 max-w-sm text-left typing-text"></p>
+            <button id="advance-btn-2" class="opacity-0 transition-opacity duration-500 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:scale-105 transform mt-6 mb-8">Avançar</button>
+        </div>
+    </div>
+    
+    <!-- Tela 5: Vídeo 1 (Scrollable) -->
+    <div id="video-screen" class="screen scrollable bg-gray-900">
+        <div class="w-full max-w-lg mx-auto flex flex-col items-center">
+             <div class="phone-frame mx-auto mt-8">
+                <iframe src="https://streamable.com/e/fck4hu" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <p id="typing-text-2" class="text-md md:text-lg text-gray-300 mt-8 max-w-sm text-left typing-text"></p>
+            <button id="advance-btn-3" class="opacity-0 transition-opacity duration-500 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:scale-105 transform mt-6 mb-8">Avançar</button>
+        </div>
+    </div>
+
+    <!-- Tela 6: Feedback (Scrollable) -->
+    <div id="feedback-screen" class="screen scrollable gradient-background">
+        <div class="text-center bg-white/70 backdrop-blur-sm p-8 rounded-2xl shadow-2xl max-w-md w-full">
+            <h2 class="text-2xl md:text-3xl font-bold mb-4 text-gray-800">Me ajuda a entender...</h2>
+            <p class="text-gray-700 mb-6">Sei que te magoei. Por favor, me diz, o que mais te deixou chateada comigo? Quero ouvir você.</p>
+            <textarea id="feedback-textarea" rows="5" class="w-full p-3 rounded-lg border-2 border-gray-300 focus:border-pink-400 focus:ring-pink-400 transition" placeholder="Pode escrever o que estiver sentindo..."></textarea>
+            <button id="advance-btn-4" class="opacity-50 transition-opacity duration-500 bg-gray-400 cursor-not-allowed text-white font-bold py-3 px-8 rounded-full shadow-lg mt-6">Avançar</button>
+        </div>
+    </div>
+    
+    <!-- Tela 7: Avaliação Coração -->
+    <div id="rating-screen" class="screen">
+        <div class="bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-sm w-full text-center">
+            <h2 class="text-2xl font-bold mb-6 text-pink-300">Como está seu coração em relação a mim agora?</h2>
+            <div id="rating-hearts" class="rating-hearts flex justify-center text-5xl text-gray-400 mb-6">
+                <span class="heart-rating" data-value="1">♡</span>
+                <span class="heart-rating" data-value="2">♡</span>
+                <span class="heart-rating" data-value="3">♡</span>
+                <span class="heart-rating" data-value="4">♡</span>
+                <span class="heart-rating" data-value="5">♡</span>
+            </div>
+            <p class="text-sm text-gray-500">(1 = péssimo, 5 = bom)</p>
+        </div>
+    </div>
+
+    <!-- Tela 8: Vídeo Final (Scrollable) -->
+    <div id="final-video-screen" class="screen scrollable bg-gray-900">
+        <div class="w-full max-w-lg mx-auto flex flex-col items-center">
+            <div class="phone-frame mx-auto mt-8">
+                <iframe src="https://streamable.com/e/f4el5c" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
+            </div>
+            <p id="typing-text-3" class="text-md md:text-lg text-gray-300 mt-8 max-w-sm text-left typing-text"></p>
+            <button id="advance-btn-5" class="opacity-0 transition-opacity duration-500 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:scale-105 transform mt-6 mb-8">Avançar</button>
+        </div>
+    </div>
+
+    <!-- Tela 9: Carta -->
+    <div id="letter-screen" class="screen">
+        <div id="envelope" class="envelope">
+            <div class="envelope-flap"></div>
+            <div class="letter">
+                <p class="text-2xl font-semibold mb-6">Volta pra mim, meu amor. 😥</p>
+                <div class="flex gap-4">
+                    <button id="yes-btn" class="bg-green-500 text-white font-bold py-2 px-6 rounded-lg">Sim</button>
+                    <button id="no-btn" class="bg-red-500 text-white font-bold py-2 px-6 rounded-lg">Não</button>
+                </div>
+            </div>
+        </div>
+        <p class="mt-8 text-lg text-gray-400">Toque na carta</p>
+    </div>
+
+    <!-- Tela Final: Sim -->
+    <div id="yes-screen" class="screen gradient-background">
+        <div class="text-center text-gray-800">
+            <h1 class="dancing-script text-7xl md:text-9xl mb-4">Eu te amo!</h1>
+            <div class="text-8xl">❤️</div>
+        </div>
+    </div>
+    
+    <!-- Tela Final: Não -->
+    <div id="no-screen" class="screen">
+        <div class="text-center text-gray-400 text-8xl">💔</div>
+    </div>
+
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
-        import { getDatabase, ref, onValue, remove } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getDatabase, ref, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
         const firebaseConfig = {
-            apiKey: "AIzaSyASJFA8fgN83pfFIvjhK460c0Km4kIKgJc",
-            authDomain: "escala-de-servi.firebaseapp.com",
-            projectId: "escala-de-servi",
-            storageBucket: "escala-de-servi.firebasestorage.app",
-            messagingSenderId: "1051260696308",
-            appId: "1:1051260696308:web:6d978c17f05b5e2db950a1",
-            measurementId: "G-RSLQ9EPDKE",
-            databaseURL: "https://escala-de-servi-default-rtdb.firebaseio.com/"
+            apiKey: "AIzaSyBYYo4vdkutyq4jfzZ7jdlbpWbHFAdQhxg",
+            authDomain: "maxpeev2-aeeab.firebaseapp.com",
+            databaseURL: "https://maxpeev2-aeeab-default-rtdb.firebaseio.com",
+            projectId: "maxpeev2-aeeab",
+            storageBucket: "maxpeev2-aeeab.appspot.com",
+            messagingSenderId: "147401794958",
+            appId: "1:147401794958:web:be43ef253e37a89e5f30df"
         };
 
-        let app, db, auth, userId;
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const sessionId = 'resposta_' + Date.now();
 
-        const currentAppId = firebaseConfig.appId.split(':')[1];
-        const SCALES_PATH = `artifacts/${currentAppId}/public/scales`;
-
-        async function initializeFirebase() {
-            try {
-                if (!firebaseConfig.apiKey) {
-                    const mainScalesContainer = document.getElementById('main-scales-container');
-                    mainScalesContainer.innerHTML = '<p class="text-white text-lg mt-10 text-red-400">Erro: Configuração do Firebase ausente ou inválida.</p>';
-                    return;
-                }
-                app = initializeApp(firebaseConfig);
-                auth = getAuth(app);
-                db = getDatabase(app);
-
-                await signInAnonymously(auth);
-
-                onAuthStateChanged(auth, (user) => {
-                    if (user) {
-                        userId = user.uid;
-                        console.log("Usuário autenticado anonimamente:", userId);
-                        listenForScalesData();
-                    } else {
-                        console.log("Nenhum usuário autenticado.");
-                        userId = null;
-                        const mainScalesContainer = document.getElementById('main-scales-container');
-                        mainScalesContainer.innerHTML = '<p class="text-white text-lg mt-10 text-red-400">Autenticação necessária para carregar escalas.</p>';
-                    }
-                });
-            } catch (error) {
-                console.error("Erro ao inicializar Firebase ou autenticar:", error);
-                const mainScalesContainer = document.getElementById('main-scales-container');
-                mainScalesContainer.innerHTML = `<p class="text-white text-lg mt-10 text-red-400">Erro ao carregar o aplicativo: ${error.message}</p>`;
-            }
+        function saveData(data) {
+            const dataRef = ref(db, 'respostas_reconciliacao/' + sessionId);
+            update(dataRef, data);
         }
 
-        // --- NOVA FUNÇÃO: Formatar o nome para exibição na página da escala ---
-        function formatDisplayMilitaryName(name, number = null) {
-            if (!name || typeof name !== 'string') {
-                return 'N/A';
+        const screens = { 
+            heart: document.getElementById('heart-screen'),
+            identity: document.getElementById('identity-screen'),
+            apology: document.getElementById('apology-screen'),
+            photo: document.getElementById('photo-screen'),
+            video: document.getElementById('video-screen'),
+            feedback: document.getElementById('feedback-screen'),
+            rating: document.getElementById('rating-screen'),
+            finalVideo: document.getElementById('final-video-screen'),
+            letter: document.getElementById('letter-screen'),
+            yes: document.getElementById('yes-screen'),
+            no: document.getElementById('no-screen')
+        };
+
+        function switchScreen(toScreen) {
+            Object.values(screens).forEach(s => s.classList.remove('visible'));
+            screens[toScreen].classList.add('visible');
+            if (screens[toScreen].classList.contains('scrollable')) {
+                screens[toScreen].scrollTop = 0;
             }
+        }
+        
+        function typewriter(element, text, callback, i = 0) {
+            if (i < text.length) {
+                element.innerHTML = text.substring(0, i + 1);
+                setTimeout(() => typewriter(element, text, callback, i + 1), 60);
+            } else if (callback) {
+                callback();
+            }
+        }
+        
+        // --- Lógica das Telas ---
 
-            let formattedPart = '';
-            let restOfName = name.trim();
+        // Tela 1: Coração
+        const heartWrapper = document.getElementById('heart-wrapper');
+        const instruction = document.getElementById('instruction');
+        let interactionDone = false;
+        let lastTap = 0;
 
-            // Try to extract rank and then number if present
-            const rankMatch = restOfName.match(/^([A-Za-z.]+)\s*(.*)$/); // Matches first word (rank)
-            if (rankMatch) {
-                const rank = rankMatch[1].toUpperCase();
-                restOfName = rankMatch[2].trim();
+        function startReconciliation() {
+            if (interactionDone) return;
+            interactionDone = true;
+            instruction.style.opacity = '0';
+            heartWrapper.classList.add('joined');
+            heartWrapper.querySelector('.left-heart').addEventListener('transitionend', () => {
+                heartWrapper.classList.add('glow');
+                heartWrapper.addEventListener('animationend', () => {
+                    screens.heart.classList.remove('visible');
+                    setTimeout(() => switchScreen('identity'), 500);
+                });
+            });
+        }
+        screens.heart.addEventListener('dblclick', startReconciliation);
+        screens.heart.addEventListener('touchend', (event) => {
+            const currentTime = new Date().getTime();
+            const tapLength = currentTime - lastTap;
+            if (tapLength < 300 && tapLength > 0) {
+                event.preventDefault();
+                startReconciliation();
+            }
+            lastTap = currentTime;
+        });
 
-                const numberMatch = restOfName.match(/^(\d+)\s*(.*)$/); // Matches number after rank
-                if (numberMatch) {
-                    const num = numberMatch[1];
-                    restOfName = numberMatch[2].trim();
-                    formattedPart = `<span class="formatted-rank-number">${rank} ${num}</span>`;
-                } else {
-                    formattedPart = `<span class="formatted-rank-number">${rank}</span>`;
-                }
+        // Tela 2: Identidade
+        document.querySelectorAll('input[name="identity"]').forEach(radio => {
+            radio.addEventListener('change', () => setTimeout(() => switchScreen('apology'), 800));
+        });
+
+        // Tela 3: Desculpas
+        document.getElementById('advance-btn-1').addEventListener('click', () => {
+            switchScreen('photo');
+            const textToType = "Nesse dia, quando te deixei, a sensação foi horrível. Foram duas semanas sem notícias suas, sem saber como você estava. Meu coração estava apertado, a saudade me matava, e é assim que me sinto quando não estamos juntos. É um sentimento que só passa quando estou com você.";
+            typewriter(document.getElementById('typing-text'), textToType, () => {
+                document.getElementById('advance-btn-2').style.opacity = '1';
+            });
+        });
+
+        // Tela 4: Foto
+        document.getElementById('advance-btn-2').addEventListener('click', () => {
+             const textToType = "Quase 1 ano e 1 mês que estamos juntos e insistimos em brigas bobas, em nos separar. Mas não é o que quero para a gente. Quero continuar te amando mais e mais. Quero que você seja meu mundo e que viva por mim. Quero casar com você e ter filhos. Sempre foi meu desejo. Não quero que você vá e me deixe, eu jamais vou conseguir amar alguém como amo você.";
+             switchScreen('video');
+             typewriter(document.getElementById('typing-text-2'), textToType, () => {
+                document.getElementById('advance-btn-3').style.opacity = '1';
+             });
+        });
+
+        // Tela 5: Vídeo 1
+        document.getElementById('advance-btn-3').addEventListener('click', () => switchScreen('feedback'));
+        
+        // Tela 6: Feedback
+        const feedbackTextarea = document.getElementById('feedback-textarea');
+        const advanceBtn4 = document.getElementById('advance-btn-4');
+        feedbackTextarea.addEventListener('input', () => {
+            if (feedbackTextarea.value.trim().length > 5) {
+                advanceBtn4.style.opacity = '1';
+                advanceBtn4.classList.remove('bg-gray-400', 'cursor-not-allowed');
+                advanceBtn4.classList.add('bg-gradient-to-r', 'from-pink-500', 'to-rose-500');
             } else {
-                // If no recognizable rank at the beginning, just use the name as is.
-                // Or you might want a default rank like "MILITAR"
-                formattedPart = '<span class="formatted-rank-number">MILITAR</span>'; // Default if no rank found
+                advanceBtn4.style.opacity = '0.5';
+                advanceBtn4.classList.add('bg-gray-400', 'cursor-not-allowed');
+                advanceBtn4.classList.remove('bg-gradient-to-r', 'from-pink-500', 'to-rose-500');
             }
-
-            // Append the remaining name
-            let finalName = '';
-            if (restOfName) {
-                // Capitalize the first letter of each part of the rest of the name
-                finalName = restOfName.split(' ').map(word => {
-                    if (word.length === 0) return '';
-                    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-                }).join(' ');
+        });
+        advanceBtn4.addEventListener('click', () => {
+            if (feedbackTextarea.value.trim().length > 5) {
+                saveData({ motivoChateada: feedbackTextarea.value });
+                switchScreen('rating');
             }
-            
-            // If a separate number was passed (e.g., from dynamic inputs), prioritize it if format is just name.
-            // This part handles the "SD 000 Nome" where 000 is from a separate number field.
-            if (number && number !== 'S/N' && formattedPart.indexOf(number) === -1) { // Avoid duplicating number if already in formattedPart
-                formattedPart = `<span class="formatted-rank-number">${formattedPart.replace(/<\/?span[^>]*>/g, '')} ${number}</span>`;
-            }
+        });
 
-            return `${formattedPart} ${finalName}`.trim();
-        }
-        // --- FIM DA NOVA FUNÇÃO ---
-
-        function listenForScalesData() {
-            if (!db) {
-                console.error("Realtime Database não inicializado.");
-                return;
-            }
-
-            const scalesRef = ref(db, SCALES_PATH);
-            
-            onValue(scalesRef, (snapshot) => {
-                const scalesData = [];
-                snapshot.forEach((childSnapshot) => {
-                    const key = childSnapshot.key;
-                    const data = childSnapshot.val();
-                    scalesData.push({ id: key, ...data });
+        // Tela 7: Rating
+        const hearts = document.querySelectorAll('.heart-rating');
+        hearts.forEach(heart => {
+            heart.addEventListener('click', () => {
+                const rating = heart.dataset.value;
+                saveData({ avaliacaoCoracao: rating });
+                hearts.forEach(h => {
+                    h.innerHTML = h.dataset.value <= rating ? '♥' : '♡';
+                    h.classList.toggle('selected', h.dataset.value <= rating);
                 });
-                console.log("Dados das escalas recebidos:", scalesData);
-                updateScalesDisplay(scalesData);
-            }, (error) => {
-                console.error("Erro ao obter dados das escalas do Realtime Database:", error);
-                const mainScalesContainer = document.getElementById('main-scales-container');
-                mainScalesContainer.innerHTML = `<p class="text-white text-lg mt-10 text-red-400">Erro ao carregar escalas: ${error.message}</p>`;
-            });
-        }
-
-        function updateScalesDisplay(schedules) {
-            const mainScalesContainer = document.getElementById('main-scales-container');
-            mainScalesContainer.innerHTML = '';
-
-            schedules.sort((a, b) => {
-                // Get current date without time for comparison
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-
-                const dateA = new Date(a.date + "T00:00:00");
-                const dateB = new Date(b.date + "T00:00:00");
-
-                // Prioritize current/future dates
-                if (dateA >= today && dateB < today) {
-                    return -1; // A comes before B
-                }
-                if (dateA < today && dateB >= today) {
-                    return 1; // B comes before A
-                }
-
-                // For dates in the same category (both future/current or both past), sort descending
-                return dateB.getTime() - dateA.getTime();
-            });
-
-            let hasActiveScales = false;
-
-            const now = new Date(); // Get current date/time to check for expiration
-            now.setHours(now.getHours() - 3); // Adjust to Acre time zone (-5 from UTC, -3 from Brasília)
-
-            schedules.forEach(data => {
-                // For display, use the saved date
-                const scaleDateObj = new Date(data.date + "T00:00:00"); // Use T00:00:00 to represent start of the day
-                const expirationDate = new Date(scaleDateObj);
-                expirationDate.setDate(expirationDate.getDate() + 1); // Scale expires at the start of the next day
-
-                if (now >= expirationDate) {
-                    console.log(`Removing expired scale: ${data.date}`);
-                    remove(ref(db, `${SCALES_PATH}/${data.id}`));
-                    return; 
-                }
-
-                hasActiveScales = true;
-
-                const whiteSquareDiv = document.createElement('div');
-                whiteSquareDiv.className = `white-square ${data.color}-border`; 
-
-                const formattedDate = scaleDateObj.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
-                const dayOfWeek = scaleDateObj.toLocaleDateString('pt-BR', { weekday: 'long' }).toUpperCase();
-
-                let tableRowsHtml = '';
-
-                // Helper to add a row, applying the new formatting
-                const addFormattedRow = (funcName, militarName, militarNumber = null) => {
-                    const displayMilitar = formatDisplayMilitaryName(militarName, militarNumber);
-                    return `
-                        <tr>
-                            <td><strong>${funcName}</strong></td>
-                            <td>${displayMilitar}</td>
-                        </tr>
-                    `;
-                };
-
-                // Helper for array-based rows
-                const addFormattedArrayRows = (funcName, arrayData) => {
-                    let html = '';
-                    const militaries = Array.isArray(arrayData) && arrayData.length > 0 
-                                             ? arrayData 
-                                             : [{name: 'N/A', number: 'S/N'}]; 
-
-                    militaries.forEach((militar, index) => {
-                        const displayMilitar = formatDisplayMilitaryName(militar.name, militar.number);
-                        if (index === 0) {
-                            html += `
-                                <tr>
-                                    <td rowspan="${militaries.length}" style="vertical-align: middle; text-align: center;"><strong>${funcName}</strong></td>
-                                    <td>${displayMilitar}</td>
-                                </tr>
-                            `;
-                        } else {
-                            html += `
-                                <tr>
-                                    <td>${displayMilitar}</td>
-                                </tr>
-                            `;
-                        }
+                setTimeout(() => {
+                    const textToType = "Gosto de relembrar esse momento, meu amor. Aquele dia foi tão especial. Fizemos loucuras, comemos, perdemos coisas kkkk. Quero voltar a ser como antes, meu amor. Quero voltar a andar a pé por aí, ficar indo nesses lugares doidos no Bujari. Quero voltar para o banco da praça, quero voltar a viver com você, meu amor. Então, por favor, desiste dessa loucura e volta pra gente.";
+                    switchScreen('finalVideo');
+                    typewriter(document.getElementById('typing-text-3'), textToType, () => {
+                        document.getElementById('advance-btn-5').style.opacity = '1';
                     });
-                    return html;
-                };
-
-                tableRowsHtml += addFormattedRow("Oficial de Dia", data.oficialDeDia);
-                tableRowsHtml += addFormattedRow("Adjunto ao Oficial", data.adjuntoOficial);
-                tableRowsHtml += addFormattedRow("Sgt de Dia", data.sgtDeDia);
-                tableRowsHtml += addFormattedRow("Cmt da Guarda", data.cmtGuarda);
-                tableRowsHtml += addFormattedRow("Cb Dia ao Btl", data.cbDiaBtl);
-                tableRowsHtml += addFormattedRow("Cabo da Guarda", data.caboGuarda);
-                tableRowsHtml += addFormattedRow("Mot. Ambulância", data.motAmbulancia);
-                tableRowsHtml += addFormattedRow("Mot. Sobreaviso CTA", data.motSobreavisoCta);
-
-                // For "Mot. de Dia", use name and number from the object
-                tableRowsHtml += addFormattedRow("Mot. de Dia", data.motDeDia?.name, data.motDeDia?.number);
-
-                // Add the section divider
-                tableRowsHtml += `<tr><td colspan="2" class="section-divider"></td></tr>`;
-
-                tableRowsHtml += addFormattedArrayRows("Plantão a CEEM", data.plantaoCeem);
-
-                // Add the section divider
-                tableRowsHtml += `<tr><td colspan="2" class="section-divider"></td></tr>`;
-
-                tableRowsHtml += addFormattedArrayRows("Guardas ao Quartel", data.guardasQuartel);
-                
-                // Determine the background class for the header
-                let headerBgClass = '';
-                if (data.color === 'vermelha') {
-                    headerBgClass = 'bg-red-500 text-white'; // Tailwind CSS classes for red background and white text
-                } else {
-                    headerBgClass = 'bg-gray-200 text-gray-800'; // Default background for other colors
-                }
-
-                whiteSquareDiv.innerHTML = `
-                    <div class="table-date-header ${headerBgClass}">
-                        <span>${formattedDate} - ${dayOfWeek}</span>
-                    </div>
-                    <table class="scale-table">
-                        <thead>
-                            <tr>
-                                <th style="width: 40%;">FUNÇÃO</th>
-                                <th style="width: 60%;">MILITAR ESCALADO</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${tableRowsHtml}
-                        </tbody>
-                    </table>
-                `;
-                mainScalesContainer.appendChild(whiteSquareDiv);
+                }, 800);
             });
+        });
+        
+        // Tela 8: Vídeo Final
+        document.getElementById('advance-btn-5').addEventListener('click', () => switchScreen('letter'));
 
-            if (!hasActiveScales) {
-                mainScalesContainer.innerHTML = '<p class="text-white text-lg mt-10">Nenhuma escala ativa no momento.</p>';
-            }
-        }
-
-        window.onload = initializeFirebase;
+        // Tela 9: Carta
+        document.getElementById('envelope').addEventListener('click', (e) => e.currentTarget.classList.add('open'));
+        document.getElementById('yes-btn').addEventListener('click', () => {
+            saveData({ respostaFinal: 'Sim' });
+            switchScreen('yes');
+        });
+        document.getElementById('no-btn').addEventListener('click', () => {
+            saveData({ respostaFinal: 'Não' });
+            switchScreen('no');
+        });
     </script>
 </body>
 </html>
+
